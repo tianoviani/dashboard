@@ -70,7 +70,7 @@ plt.suptitle('Distribution of Product Dimensions Across Different Categories', y
 fig = plt.gcf()
 st.pyplot(fig)
 
-# Explanation for "hr"
+# Explanation
 
 st.write("""
 The pair plot displays the distribution of product dimensions (length, height, width) across different product categories. Each point on the plot represents a product, with colors indicating the product category. By analyzing the relationships between the dimensions within each category, you can observe how the dimensions vary and potentially identify any patterns or outliers. This visualization offers a comprehensive view of how product dimensions are distributed across various product categories, providing insights into the relationships and variations in dimension values within each category.""")
