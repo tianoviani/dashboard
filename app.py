@@ -47,8 +47,19 @@ st.write("""
 # Header
 st.title("Product Distribution")
 
-# Handle NaN or infinite values in the DataFrame
-filtered_df = df.replace([np.inf, -np.inf], np.nan).dropna()
+# Impute missing numerical values with median
+for column in ['product_name_lenght', 'product_description_lenght', 'product_photos_qty', 'product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']:
+    median_value = df[column].median()
+    df[column].fillna(median_value, inplace=True)
+
+# Convert numerical columns to integers
+df['product_name_lenght'] = df['product_name_lenght'].astype(int)
+df['product_description_lenght'] = df['product_description_lenght'].astype(int)
+df['product_photos_qty'] = df['product_photos_qty'].astype(int)
+
+# Selecting a few categories for visualization to keep the plot readable
+selected_categories = df['product_category_name'].value_counts().nlargest(5).index
+filtered_df = df[df['product_category_name'].isin(selected_categories)]
 
 # Plotting
 plt.figure(figsize=(14, 10), facecolor='white')
@@ -59,7 +70,7 @@ plt.suptitle('Distribution of Product Dimensions Across Different Categories', y
 fig = plt.gcf()
 st.pyplot(fig)
 
-# Explanation for "hr"
+# Explanation
 
 st.write("""
 The pair plot displays the distribution of product dimensions (length, height, width) across different product categories. Each point on the plot represents a product, with colors indicating the product category. By analyzing the relationships between the dimensions within each category, you can observe how the dimensions vary and potentially identify any patterns or outliers. This visualization offers a comprehensive view of how product dimensions are distributed across various product categories, providing insights into the relationships and variations in dimension values within each category.""")
