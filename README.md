@@ -47,9 +47,23 @@ st.write("""
 # Header
 st.title("Product Distribution")
 
+# Impute missing numerical values with median
+for column in ['product_name_lenght', 'product_description_lenght', 'product_photos_qty', 'product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']:
+    median_value = df[column].median()
+    df[column].fillna(median_value, inplace=True)
+
+# Convert numerical columns to integers
+df['product_name_lenght'] = df['product_name_lenght'].astype(int)
+df['product_description_lenght'] = df['product_description_lenght'].astype(int)
+df['product_photos_qty'] = df['product_photos_qty'].astype(int)
+
+# Selecting a few categories for visualization to keep the plot readable
+selected_categories = df['product_category_name'].value_counts().nlargest(5).index
+filtered_df = df[df['product_category_name'].isin(selected_categories)]
+
 # Plotting
 plt.figure(figsize=(14, 10), facecolor='white')
-sns.pairplot(data=df, hue='product_category_name', vars=['product_length_cm', 'product_height_cm', 'product_width_cm'])
+sns.pairplot(data=filtered_df, hue='product_category_name', vars=['product_length_cm', 'product_height_cm', 'product_width_cm'])
 plt.suptitle('Distribution of Product Dimensions Across Different Categories', y=1.02)
 
 # Display the plot using Streamlit 
