@@ -47,9 +47,12 @@ st.write("""
 # Header
 st.title("Product Distribution")
 
+# Handle NaN or infinite values in the DataFrame
+filtered_df = df.replace([np.inf, -np.inf], np.nan).dropna()
+
 # Plotting
 plt.figure(figsize=(14, 10), facecolor='white')
-sns.pairplot(data=df, hue='product_category_name', vars=['product_length_cm', 'product_height_cm', 'product_width_cm'])
+sns.pairplot(data=filtered_df, hue='product_category_name', vars=['product_length_cm', 'product_height_cm', 'product_width_cm'])
 plt.suptitle('Distribution of Product Dimensions Across Different Categories', y=1.02)
 
 # Display the plot using Streamlit 
