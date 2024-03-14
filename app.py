@@ -62,12 +62,27 @@ selected_categories = df['product_category_name'].value_counts().nlargest(5).ind
 filtered_df = df[df['product_category_name'].isin(selected_categories)]
 
 # Plotting
-plt.figure(figsize=(14, 10), facecolor='white')
-sns.pairplot(data=filtered_df, hue='product_category_name', vars=['product_length_cm', 'product_height_cm', 'product_width_cm'])
-plt.suptitle('Distribution of Product Dimensions Across Different Categories', y=1.02)
+fig, axes = plt.subplots(3, 3, figsize=(14, 10), facecolor='white')
+categories = filtered_df['product_category_name'].unique()
+
+for i, ax_row in enumerate(axes):
+    for j, ax in enumerate(ax_row):
+        if i == j:
+            continue  # Skip diagonal plots
+        for category in categories:
+            category_data = filtered_df[filtered_df['product_category_name'] == category]
+            ax.scatter(category_data['product_length_cm'], category_data['product_height_cm'], label=category)
+            ax.scatter(category_data['product_length_cm'], category_data['product_width_cm'])
+            ax.scatter(category_data['product_height_cm'], category_data['product_width_cm'])
+            ax.set_xlabel('Product Length (cm)')
+            ax.set_ylabel('Product Height and Width (cm)')
+            ax.set_title('Distribution of Product Dimensions Across Different Categories')
+            ax.legend()
+
+# Adjust layout
+plt.tight_layout()
 
 # Display the plot using Streamlit 
-fig = plt.gcf()
 st.pyplot(fig)
 
 # Explanation
